@@ -17,8 +17,12 @@
                     </div>
 
                     <div class="form-group mb-2">
-                        <input type="password" class="form-control" placeholder="Enter passwordCheck"
-                            id="passwordCheck">
+                        <input type="password" class="form-control" placeholder="Enter passwordCheck" id="passwordCheck"
+                            onchange="checkSamePassword()">
+                    </div>
+
+                    <div id="passwordCheckAlert">
+
                     </div>
 
                     <div class="form-group mb-2">
@@ -31,9 +35,48 @@
         </div>
 
         <script>
+            // function valid() {
+            //     // 1. 값 찾기
+            //     let password = $("#password").val();
+            //     let passwordCheck = $("#passwordCheck").val();
+
+            //     // .2 값 검증
+            //     if (password != passwordCheck) {
+            //         alert("비밀번호가 동일하지 않습니다.");
+            //         return false;
+            //     }
+            //     return true;
+            // }
+
+            let checkPassword = false;
+
             function valid() {
-                alert("회원가입 유효성 검사");
+                if (checkPassword == true) {
+                    return true;
+                }
+                return false;
             }
+
+            function checkSamePassword() {
+                let password = $("#password").val();
+                let passwordCheck = $("#passwordCheck").val();
+                if (password == passwordCheck) {
+                    checkPassword = true;
+                    $("#passwordCheckAlert").empty();
+                    let el = `<div class="alert alert-success" id="passwordCheckAlert">
+                            <strong>비밀번호 확인 완료!</strong>
+                        </div>`
+                    $("#passwordCheckAlert").append(el);
+                } else {
+                    checkPassword = false;
+                    $("#passwordCheckAlert").empty();
+                    let el = `<div class="alert alert-danger">
+                            <strong>비밀번호가 다릅니다!</strong>
+                        </div>`
+                    $("#passwordCheckAlert").append(el);
+                }
+            }
+
         </script>
 
         <%@ include file="../layout/footer.jsp" %>
