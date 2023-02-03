@@ -9,4 +9,9 @@
       insert into user_tb(username, password, email) values(#{username}, #{password}, #{email})
    </insert>
 
+
+   <select id="findByUsernameAndPassword" resultType="shop.mtcoding.blog.model.User">
+      select * from user_tb where username = #{username} and password = #{password}
+   </select>
+
 </mapper>
