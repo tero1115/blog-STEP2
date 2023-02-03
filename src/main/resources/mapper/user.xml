@@ -6,7 +6,7 @@
 <mapper namespace="shop.mtcoding.blog.model.UserRepository">
 
    <insert id="insert" > 
-      insert into user_tb(username, password, email) values(#{username}, #{password}, #{email})
+      insert into user_tb(username, password, email, created_at) values(#{username}, #{password}, #{email}, now())
    </insert>
 
 

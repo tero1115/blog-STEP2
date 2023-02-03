@@ -2,7 +2,8 @@ create table user_tb(
     id int auto_increment primary key,
     username varchar not null unique,
     password varchar not null,
-    email varchar not null
+    email varchar not null,
+    created_at timestamp not null
 );
 
 create table board_tb(
@@ -10,5 +11,5 @@ create table board_tb(
     title varchar not null,
     content varchar not null,
     user_id int not null,
-    created_at timestamp
+    created_at timestamp not null
 );

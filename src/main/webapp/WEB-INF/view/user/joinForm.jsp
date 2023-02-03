@@ -35,18 +35,6 @@
         </div>
 
         <script>
-            // function valid() {
-            //     // 1. 값 찾기
-            //     let password = $("#password").val();
-            //     let passwordCheck = $("#passwordCheck").val();
-
-            //     // .2 값 검증
-            //     if (password != passwordCheck) {
-            //         alert("비밀번호가 동일하지 않습니다.");
-            //         return false;
-            //     }
-            //     return true;
-            // }
 
             let checkPassword = false;
 

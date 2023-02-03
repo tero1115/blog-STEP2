@@ -1,5 +1,7 @@
 package shop.mtcoding.blog.model;
 
+import java.sql.Timestamp;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,4 +12,5 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private Timestamp createdAt;
 }
