@@ -35,10 +35,8 @@ public class UserController {
             throw new CustomException("email을 작성해주세요");
         }
 
-        int result = userService.회원가입(joinReqDto);
-        if (result != 1) {
-            throw new CustomException("회원가입실패");
-        }
+        userService.회원가입(joinReqDto);
+
         return "redirect:/loginForm";
     }
 
@@ -51,7 +49,9 @@ public class UserController {
             throw new CustomException("password를 작성해주세요");
         }
         User principal = userService.로그인(loginReqDto);
-
+        if (principal == null) {
+            throw new CustomException("유저네임 혹은 패스워드가 잘못 입력되었습니다");
+        }
         session.setAttribute("principal", principal);
         return "redirect:/";
     }

@@ -5,24 +5,31 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
 import shop.mtcoding.blog.model.User;
+import shop.mtcoding.blog.service.BoardService;
 
 @Controller
 public class BoardController {
 
     @Autowired
-    private BoardRepository boardRepository;
+    private HttpSession session;
 
     @Autowired
-    private HttpSession session;
+    private BoardService boardService;
+
+    @Autowired
+    private BoardRepository boardRepository;
 
     @GetMapping({ "/", "/board" })
     public String main(Model model) {
@@ -41,23 +48,25 @@ public class BoardController {
         return "board/saveForm";
     }
 
-    @PostMapping("/board/save")
-    public String save(String title, String content) {
-        // 1. 세션이 있는지 체크
+    @PostMapping("/board")
+    public String save(BoardSaveReqDto boardSaveReqDto) {
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            return "redirect:/notfound";
+            throw new CustomException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        }
+        if (boardSaveReqDto.getTitle() == null || boardSaveReqDto.getTitle().isEmpty()) {
+            throw new CustomException("title을 작성해주세요");
+        }
+        if (boardSaveReqDto.getContent() == null || boardSaveReqDto.getContent().isEmpty()) {
+            throw new CustomException("content을 작성해주세요");
+        }
+        if (boardSaveReqDto.getTitle().length() > 100) {
+            throw new CustomException("title의 길이가 100자 이하여야 합니다");
         }
 
-        int userId = principal.getId();
+        boardService.글쓰기(boardSaveReqDto, principal.getId());
 
-        int result = boardRepository.insert(title, content, userId);
-        if (result == 1) {
-            return "redirect:/";
-        } else {
-            return "redirect:/saveForm";
-        }
-
+        return "redirect:/";
     }
 
     @GetMapping("/board/{id}/updateForm")
