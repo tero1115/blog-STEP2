@@ -7,32 +7,53 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import shop.mtcoding.blog.dto.user.UserReq.JoinReqDto;
+import shop.mtcoding.blog.dto.user.UserReq.LoginReqDto;
+import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
-import shop.mtcoding.blog.model.UserRepository;
+import shop.mtcoding.blog.service.UserService;
 
 @Controller
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private HttpSession session;
 
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "user/loginForm";
+    @PostMapping("/join")
+    public String join(JoinReqDto joinReqDto) {
+
+        if (joinReqDto.getUsername() == null || joinReqDto.getUsername().isEmpty()) {
+            throw new CustomException("username을 작성해주세요");
+        }
+        if (joinReqDto.getPassword() == null || joinReqDto.getPassword().isEmpty()) {
+            throw new CustomException("password를 작성해주세요");
+        }
+        if (joinReqDto.getEmail() == null || joinReqDto.getEmail().isEmpty()) {
+            throw new CustomException("email을 작성해주세요");
+        }
+
+        int result = userService.회원가입(joinReqDto);
+        if (result != 1) {
+            throw new CustomException("회원가입실패");
+        }
+        return "redirect:/loginForm";
     }
 
     @PostMapping("/login")
-    public String login(String username, String password) {
-        User user = userRepository.findByUsernameAndPassword(username, password);
-        if (user == null) {
-            return "redirect:/loginForm";
-        } else {
-            session.setAttribute("principal", user);
-            return "redirect:/";
+    public String login(LoginReqDto loginReqDto) {
+        if (loginReqDto.getUsername() == null || loginReqDto.getUsername().isEmpty()) {
+            throw new CustomException("username을 작성해주세요");
         }
+        if (loginReqDto.getPassword() == null || loginReqDto.getPassword().isEmpty()) {
+            throw new CustomException("password를 작성해주세요");
+        }
+        User principal = userService.로그인(loginReqDto);
+
+        session.setAttribute("principal", principal);
+        return "redirect:/";
     }
 
     @GetMapping("/joinForm")
@@ -40,14 +61,9 @@ public class UserController {
         return "user/joinForm";
     }
 
-    @PostMapping("/join")
-    public String join(String username, String password, String email) {
-        int result = userRepository.insert(username, password, email);
-        if (result == 1) {
-            return "redirect:/loginForm";
-        } else {
-            return "redirect:/joinForm";
-        }
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "user/loginForm";
     }
 
     @GetMapping("/user/updateForm")
