@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import shop.mtcoding.blog.dto.ResponseDto;
@@ -82,8 +84,29 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}/updateForm")
-    public String updateForm(@PathVariable int id) {
+    public String updateForm(@PathVariable int id, Model model) {
+        model.addAttribute("dto", boardRepository.findByIdWithUser(id));
         return "board/updateForm";
+    }
+
+    @PutMapping("/board/{id}")
+    public @ResponseBody ResponseEntity<?> update(@PathVariable int id, @RequestBody BoardSaveReqDto boardSaveReqDto) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        }
+        if (boardSaveReqDto.getTitle() == null || boardSaveReqDto.getTitle().isEmpty()) {
+            throw new CustomApiException("title을 작성해주세요");
+        }
+        if (boardSaveReqDto.getContent() == null || boardSaveReqDto.getContent().isEmpty()) {
+            throw new CustomApiException("content을 작성해주세요");
+        }
+        if (boardSaveReqDto.getTitle().length() > 100) {
+            throw new CustomApiException("title의 길이가 100자 이하여야 합니다");
+        }
+        boardService.게시글수정(id, boardSaveReqDto, principal.getId());
+
+        return new ResponseEntity<>(new ResponseDto<>(1, "수정성공", null), HttpStatus.OK);
     }
 
 }
