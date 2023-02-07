@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateReqDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
@@ -49,7 +50,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void 게시글수정(int id, BoardSaveReqDto boardSaveReqDto, int userId) {
+    public void 게시글수정(int id, BoardUpdateReqDto BoardUpdateReqDto, int userId) {
         Board boardPS = boardRepository.findById(id);
         if (boardPS == null) {
             throw new CustomApiException("없는 게시글을 수정할 수 없습니다");
@@ -59,7 +60,7 @@ public class BoardService {
         }
 
         try {
-            boardRepository.updateById(id, boardSaveReqDto.getTitle(), boardSaveReqDto.getContent());
+            boardRepository.updateById(id, BoardUpdateReqDto.getTitle(), BoardUpdateReqDto.getContent());
         } catch (Exception e) {
             throw new CustomApiException("서버에 일시적인 문제가 생겼습니다", HttpStatus.INTERNAL_SERVER_ERROR);
         }
