@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,6 +30,7 @@ import shop.mtcoding.blog.dto.board.BoardResp;
 import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog.model.User;
 
+@Transactional // 메서드 실행 직후 무조건 롤백 / 서비스에 트랜잭션과 다름
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class BoardControllerTest {
@@ -63,7 +65,7 @@ public class BoardControllerTest {
         ResultActions resultActions = mvc.perform(
                 delete("/board/" + id).session(mockSession));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("테스트 : " + responseBody);
+        System.out.println("delete_test : " + responseBody);
 
         // then
         /*
@@ -86,7 +88,7 @@ public class BoardControllerTest {
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         List<BoardResp.BoardMainRespDto> dtos = (List<BoardResp.BoardMainRespDto>) map.get("dtos");
         String model = om.writeValueAsString(dtos);
-        System.out.println("테스트 : " + model);
+        System.out.println("main_test : " + model);
         // then
         resultActions.andExpect(status().isOk());
         assertThat(dtos.size()).isEqualTo(6);
@@ -105,7 +107,7 @@ public class BoardControllerTest {
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         BoardDetailRespDto dto = (BoardDetailRespDto) map.get("dto");
         String model = om.writeValueAsString(dto);
-        System.out.println("테스트 : " + model);
+        System.out.println("detail_test : " + model);
 
         // then
         resultActions.andExpect(status().isOk());
