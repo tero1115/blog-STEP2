@@ -11,6 +11,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
+import shop.mtcoding.blog.util.HtmlParse;
 
 @Transactional(readOnly = true) // 모든 메소드에 다붙음
 @Service
@@ -22,9 +23,11 @@ public class BoardService {
     // where 절에 걸리는 파라메터를 앞에 받기
     @Transactional
     public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
+
         int result = boardRepository.insert(
                 boardSaveReqDto.getTitle(),
                 boardSaveReqDto.getContent(),
+                HtmlParse.파싱하기(boardSaveReqDto.getContent()),
                 userId);
         if (result != 1) {
             throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,7 +53,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void 게시글수정(int id, BoardUpdateReqDto BoardUpdateReqDto, int principalId) {
+    public void 게시글수정(int id, BoardUpdateReqDto boardUpdateReqDto, int principalId) {
         Board boardPS = boardRepository.findById(id);
         if (boardPS == null) {
             throw new CustomApiException("해당 게시글을 찾을 수 없습니다");
@@ -59,11 +62,10 @@ public class BoardService {
             throw new CustomApiException("해당 게시글을 수정할 권한이 없습니다", HttpStatus.FORBIDDEN);
         }
 
-        int result = boardRepository.updateById(id, BoardUpdateReqDto.getTitle(), BoardUpdateReqDto.getContent());
+        int result = boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent(),
+                HtmlParse.파싱하기(boardUpdateReqDto.getContent()));
         if (result != 1) {
             throw new CustomApiException("게시글 수정에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
-
 }
