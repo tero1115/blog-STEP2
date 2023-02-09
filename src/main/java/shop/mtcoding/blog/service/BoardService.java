@@ -11,7 +11,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
-import shop.mtcoding.blog.util.HtmlParse;
+import shop.mtcoding.blog.util.HtmlParser;
 
 @Transactional(readOnly = true) // 모든 메소드에 다붙음
 @Service
@@ -23,14 +23,15 @@ public class BoardService {
     // where 절에 걸리는 파라메터를 앞에 받기
     @Transactional
     public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
+        String thumbnail = HtmlParser.getThumbnail(boardSaveReqDto.getContent());
 
         int result = boardRepository.insert(
                 boardSaveReqDto.getTitle(),
                 boardSaveReqDto.getContent(),
-                HtmlParse.파싱하기(boardSaveReqDto.getContent()),
+                thumbnail,
                 userId);
         if (result != 1) {
-            throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomApiException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -63,7 +64,7 @@ public class BoardService {
         }
 
         int result = boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent(),
-                HtmlParse.파싱하기(boardUpdateReqDto.getContent()));
+                HtmlParser.getThumbnail(boardUpdateReqDto.getContent()));
         if (result != 1) {
             throw new CustomApiException("게시글 수정에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
         }

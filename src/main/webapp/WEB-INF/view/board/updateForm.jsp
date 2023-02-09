@@ -33,7 +33,7 @@
             dataType: "json" // default : 응답의 mime 타입으로 유추함
         }).done((res) => {
             alert(res.msg);
-            location.href = "/";
+            location.href = "/board/"+id;
         }).fail((err) => { 
             alert(err.responseJSON.msg);
         });

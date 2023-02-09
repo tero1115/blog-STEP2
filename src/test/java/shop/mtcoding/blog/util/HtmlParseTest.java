@@ -23,21 +23,21 @@ public class HtmlParseTest {
 
     @Test
     public void jsoup_test2() {
-        String html = "<p>1</p><p><img src=\"data:image/png;base64,iVBORw0KG\"></p>";
+        String html = "<p>1</p><p><img src=\"data:image/png;base64,iVBORw0KG\"><img src=\"data:image/png;base64,1234qwer\"></p>";
         Document doc = Jsoup.parse(html);
-        // System.out.println(doc);
+        System.out.println("=======doc=======\n" + doc);
         Elements els = doc.select("img");
+        System.out.println("=======els=======\n" + els);
+
         if (els.size() == 0) {
             // 임시 사진 제공해주기
             // 디비 thumbnail -> /images/profile.jpeg
         } else {
             Element el = els.get(0);
             String img = el.attr("src");
-            System.out.println(img);
+            System.out.println("=======img=======\n" + img);
             // 디비 thumbnail -> img
         }
-        // System.out.println(els);
-
     }
 
     @Test
