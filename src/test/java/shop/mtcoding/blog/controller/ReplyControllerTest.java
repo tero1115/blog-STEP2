@@ -1,17 +1,10 @@
 package shop.mtcoding.blog.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,12 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateReqDto;
-import shop.mtcoding.blog.controller.ReplyController.ReplySaveReqDto;
-import shop.mtcoding.blog.dto.board.BoardResp;
-import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog.model.User;
 
 @Transactional // 메서드 실행 직후 무조건 롤백 / 서비스에 트랜잭션과 다름
@@ -42,7 +29,7 @@ public class ReplyControllerTest {
     private MockMvc mvc;
 
     @Autowired
-    private ObjectMapper om;
+    // private ObjectMapper om;
 
     private MockHttpSession mockSession;
 

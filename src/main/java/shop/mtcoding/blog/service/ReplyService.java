@@ -5,14 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import shop.mtcoding.blog.controller.ReplyController.ReplySaveReqDto;
-import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
-import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateReqDto;
+import shop.mtcoding.blog.dto.reply.ReplyReq.ReplySaveReqDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
-import shop.mtcoding.blog.model.Board;
-import shop.mtcoding.blog.model.BoardRepository;
 import shop.mtcoding.blog.model.ReplyRepository;
-import shop.mtcoding.blog.util.HtmlParser;
 
 @Transactional(readOnly = true) // 모든 메소드에 다붙음
 @Service
