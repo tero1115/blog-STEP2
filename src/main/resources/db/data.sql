@@ -8,4 +8,9 @@ insert into board_tb(title, content ,thumbnail ,user_id, created_at ) values('�
 insert into board_tb(title, content ,thumbnail ,user_id, created_at ) values('제목5 제목5 제목5', '<p>내용5 내용5 내용5</p>','/images/dora.png', 2, now() );
 insert into board_tb(title, content ,thumbnail ,user_id, created_at ) values('제목6 제목6 제목6', '<p>내용6 내용6 내용6</p>','/images/dora.png', 2, now() );
 
+insert into reply_tb(comment,user_id ,board_id, created_at ) values('댓글1',1, 1, now() );
+insert into reply_tb(comment,user_id ,board_id, created_at ) values('댓글2',1, 2, now() );
+insert into reply_tb(comment,user_id ,board_id, created_at ) values('댓글3',2, 1, now() );
+insert into reply_tb(comment,user_id ,board_id, created_at ) values('댓글4',2, 2, now() );
+
 commit; 
