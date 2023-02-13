@@ -67,6 +67,18 @@
 
 <script>
     function deleteByReplyId(id){
+
+        $.ajax({
+            type: "delete",
+            url: "/reply/" + id,
+            dataType: "json"
+        }).done((res) => { 
+            alert(res.msg);
+            $("#reply-"+id).remove();
+        }).fail((err) => { 
+            alert(err.responseJSON.msg);
+        });
+
         // .done일때 
         // $("#reply-"+id).remove();
         // or

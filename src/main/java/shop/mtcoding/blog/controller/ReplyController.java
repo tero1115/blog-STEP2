@@ -4,11 +4,14 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import shop.mtcoding.blog.dto.ResponseDto;
 import shop.mtcoding.blog.dto.reply.ReplyReq.ReplySaveReqDto;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
@@ -24,9 +27,14 @@ public class ReplyController {
     private HttpSession session;
 
     @DeleteMapping("/reply/{id}")
-    public @ResponseBody ResponseEntity<?> (){
-        
-        return new ResponseEntity<>(new ResponseDto<>(1, "", null), HttpStatus.OK);
+    public @ResponseBody ResponseEntity<?> deleteReply(@PathVariable int id) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        }
+
+        replyService.댓글삭제(id, principal.getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "댓글삭제성공", null), HttpStatus.OK);
     }
 
     @PostMapping("/reply")
