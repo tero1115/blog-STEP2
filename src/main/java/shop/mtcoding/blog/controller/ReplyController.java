@@ -5,7 +5,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import shop.mtcoding.blog.dto.reply.ReplyReq.ReplySaveReqDto;
 import shop.mtcoding.blog.handler.ex.CustomException;
@@ -20,6 +22,12 @@ public class ReplyController {
 
     @Autowired
     private HttpSession session;
+
+    @DeleteMapping("/reply/{id}")
+    public @ResponseBody ResponseEntity<?> (){
+        
+        return new ResponseEntity<>(new ResponseDto<>(1, "", null), HttpStatus.OK);
+    }
 
     @PostMapping("/reply")
     public String sava(ReplySaveReqDto replySaveReqDto) {
