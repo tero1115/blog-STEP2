@@ -1,5 +1,7 @@
 package shop.mtcoding.blog.model;
 
+import java.sql.Timestamp;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,11 +12,17 @@ public interface UserRepository {
 
     public User findById(int id);
 
-    public int updateById(@Param("id") int id, @Param("password") String password, @Param("email") String eamil);
+    public int updateById(@Param("id") int id,
+            @Param("username") String username,
+            @Param("password") String password,
+            @Param("email") String email,
+            @Param("profile") String profile,
+            @Param("createdAt") Timestamp createdAt);
 
     public int deleteById(int id);
 
     public User findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     public User findByUsername(@Param("username") String username);
+
 }
